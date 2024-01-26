@@ -1,7 +1,13 @@
+using VakaAPI.Data;
+using VakaAPI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<DataContextDapper>();
+builder.Services.AddScoped<EmployeeService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
