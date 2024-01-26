@@ -30,9 +30,8 @@ namespace VakaAPI.Controllers
                 IEnumerable<Employee> employees = await _employeeService.GetAllAsync();
                 return Ok(employees);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.ToString());
                 return NotFound("Could not retrieve employees.");
             }
         }
@@ -48,9 +47,8 @@ namespace VakaAPI.Controllers
 
                 return Ok(employee);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.ToString());
                 return NotFound($"Could not retrieve employee with ID {employeeId}.");
             }
         }
@@ -65,9 +63,8 @@ namespace VakaAPI.Controllers
 
                 return BadRequest("An error occurred while inserting an employee.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.ToString());
                 return BadRequest("An error occurred while inserting an employee.");
             }
         }
@@ -82,9 +79,8 @@ namespace VakaAPI.Controllers
 
                 return BadRequest("An error occurred while updating an employee.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.ToString());
                 return BadRequest("An error occurred while updating an employee.");
             }
         }
@@ -99,9 +95,8 @@ namespace VakaAPI.Controllers
 
                 return BadRequest("An error occurred while deleting an employee.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.ToString());
                 return BadRequest("An error occurred while deleting an employee.");
             }
         }

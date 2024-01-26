@@ -1,6 +1,7 @@
 using System.Data;
 using AutoMapper;
 using Dapper;
+using Exceptions;
 using Microsoft.Data.SqlClient;
 using VakaAPI.Data;
 using VakaAPI.Models;
@@ -11,10 +12,12 @@ namespace VakaAPI.Services
     {
         private readonly DataContextDapper _dapper;
         private readonly IMapper _mapper;
+        private readonly ILogger<EmployeeService> _logger;
 
-        public EmployeeService(DataContextDapper dapper)
+        public EmployeeService(DataContextDapper dapper, ILogger<EmployeeService> logger)
         {
             _dapper = dapper;
+            _logger = logger;
 
             _mapper = new Mapper(new MapperConfiguration(cfg =>
             {
@@ -33,8 +36,9 @@ namespace VakaAPI.Services
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.ToString());
-                throw new ApplicationException("An error occured while getting employees.");
+                string errorMessage = "An error occured while getting employees.";
+                _logger.LogError(ex, errorMessage);
+                throw new ApplicationException(errorMessage);
             }
         }
 
@@ -51,8 +55,9 @@ namespace VakaAPI.Services
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.ToString());
-                throw new ApplicationException($"An error occurred while getting the employee with ID {id}.");
+                string errorMessage = $"An error occurred while getting the employee with ID {id}.";
+                _logger.LogError(ex, errorMessage);
+                throw new ApplicationException(errorMessage);
             }
         }
 
@@ -83,8 +88,9 @@ namespace VakaAPI.Services
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.ToString());
-                throw new ApplicationException($"An error occurred while inserting an employee.");
+                string errorMessage = $"An error occurred while inserting an employee.";
+                _logger.LogError(ex, errorMessage);
+                throw new ApplicationException(errorMessage);
             }
         }
 
@@ -118,8 +124,9 @@ namespace VakaAPI.Services
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.ToString());
-                throw new ApplicationException($"An error occurred while updating employee with ID {entity.EmployeeId}.");
+                string errorMessage = $"An error occurred while updating employee with ID {entity.EmployeeId}.";
+                _logger.LogError(ex, errorMessage);
+                throw new ApplicationException(errorMessage);
             }
         }
 
@@ -136,8 +143,9 @@ namespace VakaAPI.Services
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.ToString());
-                throw new ApplicationException($"An error occurred while deleting employee with ID {id}.");
+                string errorMessage = $"An error occurred while deleting employee with ID {id}.";
+                _logger.LogError(ex, errorMessage);
+                throw new ApplicationException(errorMessage);
             }
         }
 
