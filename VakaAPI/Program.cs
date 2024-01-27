@@ -10,6 +10,7 @@ builder.Services.AddLogging(configure => configure.AddConsole());
 
 builder.Services.AddScoped<DataContextDapper>();
 builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddScoped<AttendenceService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
