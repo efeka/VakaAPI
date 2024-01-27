@@ -10,10 +10,10 @@ namespace VakaAPI.Services
 {
     public class EmployeeService : IGenericService<Employee>
     {
-        private readonly DataContextDapper _dapper;
+        private readonly IDataContextDapper _dapper;
         private readonly ILogger<EmployeeService> _logger;
 
-        public EmployeeService(DataContextDapper dapper, ILogger<EmployeeService> logger)
+        public EmployeeService(IDataContextDapper dapper, ILogger<EmployeeService> logger)
         {
             _dapper = dapper;
             _logger = logger;
@@ -34,6 +34,11 @@ namespace VakaAPI.Services
                 _logger.LogError(ex, errorMessage);
                 throw new ApplicationException(errorMessage);
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException();
+            }
         }
 
         public async Task<Employee?> GetByIdAsync(int id)
@@ -52,6 +57,11 @@ namespace VakaAPI.Services
                 string errorMessage = $"An error occurred while getting the employee with ID {id}.";
                 _logger.LogError(ex, errorMessage);
                 throw new ApplicationException(errorMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException();
             }
         }
 
@@ -75,6 +85,11 @@ namespace VakaAPI.Services
                 _logger.LogError(ex, errorMessage);
                 throw new ApplicationException(errorMessage);
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException();
+            }
         }
 
         public async Task<IEnumerable<EmployeeWithSalaryDto>> GetWithSalariesById(int employeeId)
@@ -93,6 +108,11 @@ namespace VakaAPI.Services
                 string errorMessage = $"An error occurred while getting salaries for employee with ID {employeeId}.";
                 _logger.LogError(ex, errorMessage);
                 throw new ApplicationException(errorMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException();
             }
         }
 
@@ -120,6 +140,11 @@ namespace VakaAPI.Services
                 string errorMessage = $"An error occurred while inserting an employee.";
                 _logger.LogError(ex, errorMessage);
                 throw new ApplicationException(errorMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException();
             }
         }
 
@@ -150,6 +175,11 @@ namespace VakaAPI.Services
                 _logger.LogError(ex, errorMessage);
                 throw new ApplicationException(errorMessage);
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException();
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -168,6 +198,11 @@ namespace VakaAPI.Services
                 string errorMessage = $"An error occurred while deleting employee with ID {id}.";
                 _logger.LogError(ex, errorMessage);
                 throw new ApplicationException(errorMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException();
             }
         }
     }
