@@ -11,18 +11,12 @@ namespace VakaAPI.Services
     public class EmployeeService : IGenericService<Employee>
     {
         private readonly DataContextDapper _dapper;
-        private readonly IMapper _mapper;
         private readonly ILogger<EmployeeService> _logger;
 
         public EmployeeService(DataContextDapper dapper, ILogger<EmployeeService> logger)
         {
             _dapper = dapper;
             _logger = logger;
-
-            _mapper = new Mapper(new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<EmployeeToAddDto, Employee>();
-            }));
         }
 
         public async Task<IEnumerable<Employee>> GetAllAsync()
@@ -61,10 +55,45 @@ namespace VakaAPI.Services
             }
         }
 
-        public async Task<bool> AddAsync(EmployeeToAddDto employeeDto)
+        public async Task<IEnumerable<EmployeeWithSalaryDto>> GetAllWithSalariesByDate(DateTime date)
         {
-            Employee employee = GetEmployeeFromDtoMapping(employeeDto);
-            return await AddAsync(employee);
+            string sql = @"EXEC VakaSchema.sp_Employees_GetWithSalariesByDate 
+                @Year = @YearParam,
+                @Month = @MonthParam";
+
+            DynamicParameters sqlParameters = new();
+            sqlParameters.Add("@YearParam", date.Year, DbType.Int32);
+            sqlParameters.Add("@MonthParam", date.Month, DbType.Int32);
+
+            try
+            {
+                return await _dapper.LoadDataWithParametersAsync<EmployeeWithSalaryDto>(sql, sqlParameters);
+            }
+            catch (SqlException ex)
+            {
+                string errorMessage = $"An error occurred while getting employees with salaries.";
+                _logger.LogError(ex, errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
+        public async Task<IEnumerable<EmployeeWithSalaryDto>> GetWithSalariesById(int employeeId)
+        {
+            string sql = "EXEC VakaSchema.sp_Employees_GetWithSalariesById @EmployeeId = @IdParam";
+
+            DynamicParameters sqlParameters = new();
+            sqlParameters.Add("@IdParam", employeeId, DbType.Int32);
+
+            try
+            {
+                return await _dapper.LoadDataWithParametersAsync<EmployeeWithSalaryDto>(sql, sqlParameters);
+            }
+            catch (SqlException ex)
+            {
+                string errorMessage = $"An error occurred while getting salaries for employee with ID {employeeId}.";
+                _logger.LogError(ex, errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
         }
 
         public async Task<bool> AddAsync(Employee entity)
@@ -92,13 +121,6 @@ namespace VakaAPI.Services
                 _logger.LogError(ex, errorMessage);
                 throw new ApplicationException(errorMessage);
             }
-        }
-
-        public async Task<bool> UpdateAsync(EmployeeToAddDto employeeDto, int employeeId)
-        {
-            Employee employee = GetEmployeeFromDtoMapping(employeeDto);
-            employee.EmployeeId = employeeId;
-            return await UpdateAsync(employee);
         }
 
         public async Task<bool> UpdateAsync(Employee entity)
@@ -147,11 +169,6 @@ namespace VakaAPI.Services
                 _logger.LogError(ex, errorMessage);
                 throw new ApplicationException(errorMessage);
             }
-        }
-
-        private Employee GetEmployeeFromDtoMapping(EmployeeToAddDto employeeDto)
-        {
-            return _mapper.Map<Employee>(employeeDto);
         }
     }
 }
