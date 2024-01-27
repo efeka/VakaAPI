@@ -23,12 +23,6 @@ namespace VakaAPI.Controllers
             }));
         }
 
-        [HttpGet("TestConnection")]
-        public DateTime TestConnection()
-        {
-            return DateTime.Now;
-        }
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployeesAsync()
         {
@@ -81,7 +75,7 @@ namespace VakaAPI.Controllers
             }
         }
 
-        [HttpGet("IncludeSalaries/{employeeId}")]
+        [HttpGet("/IncludeSalaries/{employeeId}")]
         public async Task<ActionResult<IEnumerable<EmployeeWithSalaryDto>>> GetEmployeeSalariesById(int employeeId)
         {
             try
