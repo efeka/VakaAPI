@@ -43,7 +43,7 @@ namespace VakaAPI.Services
 
         public async Task<Employee?> GetByIdAsync(int id)
         {
-            string sql = "EXEC VakaSchema.sp_Employees_GetById @EmployeeId = @IdParam";
+            string sql = "EXEC VakaSchea.sp_Employees_GetById @EmployeeId = @IdParam";
 
             DynamicParameters sqlParameters = new();
             sqlParameters.Add("@IdParam", id, DbType.Int32);

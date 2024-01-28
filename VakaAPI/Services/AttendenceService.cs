@@ -9,10 +9,10 @@ namespace VakaAPI.Services
 {
     public class AttendenceService : IGenericService<Attendence>
     {
-        private readonly DataContextDapper _dapper;
+        private readonly IDataContextDapper _dapper;
         private readonly ILogger<AttendenceService> _logger;
 
-        public AttendenceService(DataContextDapper dapper, ILogger<AttendenceService> logger)
+        public AttendenceService(IDataContextDapper dapper, ILogger<AttendenceService> logger)
         {
             _dapper = dapper;
             _logger = logger;
