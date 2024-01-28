@@ -8,7 +8,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddLogging(configure => configure.AddConsole());
 
-builder.Services.AddScoped<DataContextDapper>();
+builder.Services.AddScoped<IDataContextDapper, DataContextDapper>();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<AttendenceService>();
 
